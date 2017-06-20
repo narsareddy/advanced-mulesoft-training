@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  	xmlns:mock="http://www.mulesoft.org/schema/mule/mock" 
-	xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
-	xmlns="http://www.mulesoft.org/schema/mule/core" 
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" 
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd">
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
     <munit:config name="munit" doc:name="MUnit configuration"/>
-    
     <spring:beans>
         <spring:import resource="classpath:order-system.xml"/>
     </spring:beans>
@@ -21,5 +12,10 @@ http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/mu
         <flow-ref name="processOrders" doc:name="processOrders"/>
         <munit:assert-true message="Failed: Expected Payload type to be Java Map but found #[payload.getClass().getName()]" condition="#[payload is java.util.Map]" doc:name="Assert True: Verify that payload type is java Map"/>
         <munit:assert-on-equals message="Failed: Expected payload size to be 2 but found #[payload.size()]" expectedValue="#[2]" actualValue="#[payload.size()]" doc:name="Assert Equals: Payload size is 2"/>
+    </munit:test>
+    <munit:test name="processOrders-internationalKeyContainsWorldwideOrders_True" description="Calling processOrders flow returns payload with International Key that contains worldwide orders">
+        <munit:set payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}]]" doc:name="Set Message: Set payload to international orders only"/>
+        <flow-ref name="processOrders" doc:name="processOrders"/>
+        <munit:assert-true message="Failed: International Key is Empty" condition="#[payload.'international'.size() &gt; 0]" doc:name="Assert True: International Key is not Empty"/>
     </munit:test>
 </mule>
