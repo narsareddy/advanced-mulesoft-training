@@ -11,16 +11,17 @@ public class HelloMavenTest extends FunctionalTestCase {
 
 	@Rule
 	public DynamicPort dynamicPort = new DynamicPort("http.port");
-	
-    @Test
-    public void mavenFlowReturnsHelloMaven() throws Exception {
-    	System.out.print("\n\nJunit Test Case #1: HTTP Dynamic Port: " + dynamicPort.getNumber() + "\n\n");
-        runFlowAndExpect("mavenFlow", "Hello Maven");
-    }
-    
-    @Override
-    protected String getConfigFile() {
-        return "maven-project.xml";
-    }
+
+	@Test
+	public void mavenFlowReturnsHelloMaven() throws Exception {
+		System.out.print("\n\nJunit Test Case #1: HTTP Dynamic Port: " + dynamicPort.getNumber() + "\n\n");
+		runFlowAndExpect("mavenFlow", "Hello Maven");
+	}
+
+	@Override
+	protected String[] getConfigFiles() {
+		String[] files = { "maven-project.xml", "config.xml" };
+		return files;
+	}
 
 }
