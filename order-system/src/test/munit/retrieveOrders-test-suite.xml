@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<munit:config name="munit" doc:name="MUnit configuration" />
+
+	<spring:beans>
+		<spring:import resource="classpath:order-system.xml" />
+	</spring:beans>
+
+	<munit:test name="retrieveOrders-payload-returns-JavaList-True"
+		description="Calling retrieveOrders flow returns a Java List">
+		<munit:set payload="#[]"
+			doc:name="Set Message: set timeFrame query parameter">
+			<munit:inbound-properties>
+				<munit:inbound-property key="http.query.params"
+					value="#[{'timeFrame':'ALL'}]" />
+			</munit:inbound-properties>
+		</munit:set>
+		<flow-ref name="retrieveOrders" doc:name="retrieveOrders" />
+		<munit:assert-true
+			message="Failed: Expected Payload to be Java List but found #[payload.getClass().getName()]"
+			condition="#[payload is java.util.List]" doc:name="Assert True: Payload is a Java List" />
+	</munit:test>
+
+</mule>

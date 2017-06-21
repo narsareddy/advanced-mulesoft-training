@@ -13,11 +13,15 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 		<spring:import resource="classpath:order-system.xml" />
 	</spring:beans>
 
-	<munit:test name="processOrders-payloadReturnsTwoElementsOfMap_True"
-		description="Calling processOrders flow will return a payload with 2 Map Objects">
+	<munit:before-test name="processOrders-test-suite-execute-before-each-test"
+		description="Before tests actions">
 		<munit:set
 			payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}, {'orderID':333, 'location':'national','price':33.03}]]"
 			doc:name="Set Message: Set payload to international &amp; domestic orders" />
+	</munit:before-test>
+
+	<munit:test name="processOrders-payloadReturnsTwoElementsOfMap_True"
+		description="Calling processOrders flow will return a payload with 2 Map Objects">
 		<flow-ref name="processOrders" doc:name="processOrders" />
 		<munit:assert-true
 			message="Failed: Expected Payload type to be Java Map but found #[payload.getClass().getName()]"
@@ -30,9 +34,6 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 	<munit:test
 		name="processOrders-internationalKeyContainsWorldwideOrders_True"
 		description="Calling processOrders flow returns payload with International Key that contains worldwide orders">
-		<munit:set
-			payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}]]"
-			doc:name="Set Message: Set payload to international orders only" />
 		<flow-ref name="processOrders" doc:name="processOrders" />
 		<munit:assert-true message="Failed: International Key is Empty"
 			condition="#[payload.'international'.size() &gt; 0]" doc:name="Assert True: International Key is not Empty" />
@@ -45,9 +46,6 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 
 	<munit:test name="processOrders-domesticKeyContainsNationalOrders_True"
 		description="Calling processOrders flow returns payload with Domestic Key that contains National orders">
-		<munit:set
-			payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}, {'orderID':333, 'location':'national','price':33.03}]]"
-			doc:name="Set Message: Set payload to all orders" />
 		<flow-ref name="processOrders" doc:name="processOrders" />
 		<munit:assert-true message="Failed: Domestic Key is Empty"
 			condition="#[payload.'domestic'.size() &gt; 0]" doc:name="Assert True: Domestic Key is not Empty" />
