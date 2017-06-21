@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
-    <munit:config name="munit" doc:name="MUnit configuration"/>
-    <spring:beans>
-        <spring:import resource="classpath:examples.xml"/>
-    </spring:beans>
-    <munit:test name="sayHello-payloadReturnsHello_True" description="Calling sayHello flow sets payload to Hello">
-        <flow-ref name="sayHello" doc:name="sayHello"/>
-        <munit:assert-payload-equals message="Payload is not Hello" expectedValue="#[&quot;Hello&quot;]" doc:name="Assert Payload is Hello"/>
-    </munit:test>
-    <munit:test name="sayHello-payloadTypeIsString_True" description="Calling sayHello sets Payload's date type to Java String">
-        <flow-ref name="sayHello" doc:name="sayHello"/>
-        <munit:assert-true message="Failed: Expected payload to be String but found #[payload.getClass().getName()]" condition="#[payload is java.lang.String]" doc:name="Assert True: Payload is String"/>
-    </munit:test>
+
+	<munit:config name="munit" doc:name="MUnit configuration" />
+
+	<spring:beans>
+		<spring:import resource="classpath:examples.xml" />
+	</spring:beans>
+
+	<munit:test name="sayHello-payloadReturnsHello_True"
+		description="Calling sayHello flow sets payload to Hello">
+		<flow-ref name="sayHello" doc:name="sayHello" />
+		<munit:assert-payload-equals message="Payload is not Hello"
+			expectedValue="#[&quot;Hello&quot;]" doc:name="Assert Payload is Hello" />
+	</munit:test>
+
+	<munit:test name="sayHello-payloadTypeIsString_True"
+		description="Calling sayHello sets Payload's date type to Java String">
+		<flow-ref name="sayHello" doc:name="sayHello" />
+		<munit:assert-true
+			message="Failed: Expected payload to be String but found #[payload.getClass().getName()]"
+			condition="#[payload is java.lang.String]" doc:name="Assert True: Payload is String" />
+	</munit:test>
+
 </mule>
