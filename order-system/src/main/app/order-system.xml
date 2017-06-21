@@ -18,8 +18,8 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 %output application/java
 ---
 {
-	'international': flowVars.orders,
-	'domestic': []
+	'international': flowVars.orders filter $.'location' == 'worldwide',
+	'domestic': flowVars.orders filter $.'location' == 'national'
 }]]></dw:set-payload>
 		</dw:transform-message>
 	</flow>
